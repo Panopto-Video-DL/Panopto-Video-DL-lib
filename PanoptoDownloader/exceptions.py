@@ -1,0 +1,3 @@
+
+class RegexNotMach(Exception):
+    pass
