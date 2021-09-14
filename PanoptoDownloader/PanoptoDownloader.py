@@ -2,6 +2,8 @@ import re
 import threading
 from ffmpeg_progress_yield import FfmpegProgress
 
+from PanoptoDownloader.exceptions import *
+
 
 class PanoptoDownloader:
 
@@ -17,7 +19,7 @@ class PanoptoDownloader:
         :return: Thread
         """
         if not self.REGEX.match(uri):
-            raise RegexNotMach('URI not match')
+            raise RegexNotMatch('URI not match')
         command = ['ffmpeg', '-f', 'hls', '-i', uri, '-c', 'copy', output]
 
         threading.excepthook = error
@@ -26,7 +28,7 @@ class PanoptoDownloader:
         return t
 
     @staticmethod
-    def _start(command: list[str], callback: callable) -> None:
+    def _start(command: list, callback: callable) -> None:
         ff = FfmpegProgress(command)
         for progress in ff.run_command_with_progress():
             callback(progress)

@@ -1,3 +1,3 @@
 
-class RegexNotMach(Exception):
+class RegexNotMatch(Exception):
     pass
