@@ -39,7 +39,7 @@ if __name__ == '__main__':
             PATH,
             callback
         )
-				print("Download completed")
+        print("Download completed")
 
     except RegexNotMatch as e:
         print(e)
