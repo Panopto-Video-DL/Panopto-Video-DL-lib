@@ -17,7 +17,7 @@ Simple library to download video from Panopto
 ## Usage
 
 ```python
-from PanoptoDownloader import PanoptoDownloader
+import PanoptoDownloader
 from PanoptoDownloader.exceptions import RegexNotMatch
 
 
@@ -25,33 +25,22 @@ URL = "https://****/master.m3u8"
 PATH = "./output.mp4"
 
 
-def callback(progress):
-  """
-  :param progress: Downloading progress. From 0 to 100
-  """
-  print(f"{progress}/100")
-  if progress == 100:
-    print("Download completed")
-
-
-def error(args, /):
-  """
-  :param args: threading.excepthook -> https://docs.python.org/3/library/threading.html#threading.excepthook
-  """
-  if isinstance(args.exc_type, RegexNotMatch):
-    print('URL not correct')
-  else:
-    raise args.exc_type
+def callback(progress: int):
+    """
+    :param progress: Downloading progress. From 0 to 100
+    """
+    print(f"{progress} / 100")
 
 
 if __name__ == '__main__':
-  downloader = PanoptoDownloader()
+    try:
+        PanoptoDownloader.download(
+            URL,
+            PATH,
+            callback
+        )
+				print("Download completed")
 
-  thread = downloader.download(
-    URL,
-    PATH,
-    callback,
-    error
-  )
-  thread.join()
+    except RegexNotMatch as e:
+        print(e)
 ```

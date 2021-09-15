@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 from setuptools import setup, find_packages
+from PanoptoDownloader import __version__
 
-long_description = open('./README.md', 'r').read()
+
+with open('./README.md', 'r') as fp:
+    long_description = fp.read()
+
 
 setup(
     name='PanoptoDownloader',
-    version='1.0.3',
+    version=__version__,
     description='Download video from Panopto',
     long_description=long_description,
     long_description_content_type='text/markdown',
