@@ -18,10 +18,9 @@ Simple library to download video from Panopto
 
 ```python
 import PanoptoDownloader
-from PanoptoDownloader.exceptions import RegexNotMatch
 
 
-URL = "https://****/master.m3u8"
+URL = "https://****"
 PATH = "./output.mp4"
 
 
@@ -41,6 +40,6 @@ if __name__ == '__main__':
         )
         print("Download completed")
 
-    except RegexNotMatch as e:
+    except Exception as e:
         print(e)
 ```

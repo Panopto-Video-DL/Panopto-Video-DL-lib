@@ -1,8 +1,7 @@
 import PanoptoDownloader
-from PanoptoDownloader.exceptions import *
 
 
-URL = input('master.m3u8 URL: ')
+URL = input('URL: ')
 PATH = input('Output file: ') or './output.mp4'
 
 
@@ -22,5 +21,5 @@ if __name__ == '__main__':
         )
         print("Download completed")
 
-    except RegexNotMatch as e:
+    except Exception as e:
         print(e)

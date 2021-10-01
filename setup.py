@@ -19,6 +19,8 @@ setup(
     packages=find_packages(),
     python_requires='>=3.8',
     install_requires=[
-        'ffmpeg_progress_yield'
+        'ffmpeg_progress_yield',
+        'urllib3',
+        'certifi'
     ]
 )
