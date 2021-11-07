@@ -3,6 +3,7 @@ import re
 import certifi
 import urllib3
 import urllib.request
+from shutil import which
 from ffmpeg_progress_yield import FfmpegProgress
 
 from .exceptions import *
@@ -36,6 +37,9 @@ def download(uri: str, output: str, callback: callable) -> None:
 
     if uri.endswith('master.m3u8'):
         command = ['ffmpeg', '-f', 'hls', '-i', uri, '-c', 'copy', output]
+
+        if which(command[0]) is None:
+            raise RuntimeError(f'{command[0]} is not in the System Path')
 
         ff = FfmpegProgress(command)
         for progress in ff.run_command_with_progress():

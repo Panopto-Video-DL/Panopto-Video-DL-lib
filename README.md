@@ -4,14 +4,14 @@ Simple library to download video from Panopto
 
 ## Prerequisites  
 
-- Python >= 3.8
+- Python >= 3.7
 
 ## Install
 
 - Download [lasted release](https://github.com/Panopto-Video-DL/Panopto-Video-DL-lib/releases)
 - In the folder run the command: 
-```bach
-> pip install .
+```shell
+pip install .
 ```
 
 ## Usage
