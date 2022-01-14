@@ -5,6 +5,8 @@ from PanoptoDownloader import __version__
 
 with open('./README.md', 'r') as fp:
     long_description = fp.read()
+with open('requirements.txt', 'r') as fp:
+    install_requires = fp.read().strip().split('\n')
 
 
 setup(
@@ -18,9 +20,12 @@ setup(
     license='MIT',
     packages=find_packages(),
     python_requires='>=3.7',
-    install_requires=[
-        'ffmpeg_progress_yield',
-        'urllib3',
-        'certifi'
-    ]
+    install_requires=install_requires,
+    extras_require={
+        'ffmpeg': ['ffmpeg_progress_yield']
+    },
+    entry_points="""
+        [console_scripts]
+        panoptodownloader=PanoptoDownloader.__main__:main
+    """,
 )

@@ -1,12 +1,17 @@
 import os.path
 import re
-import certifi
-import urllib3
+import requests
 import urllib.request
 from shutil import which
-from ffmpeg_progress_yield import FfmpegProgress
+
+try:
+    from ffmpeg_progress_yield import FfmpegProgress
+    use_ffmpeg = which('ffmpeg') is not None
+except ImportError:
+    use_ffmpeg = False
 
 from .exceptions import *
+from .hls_downloader import hls_downloader
 
 
 SUPPORTED_FORMATS = ['.mp4', '.mkv', '.flv', '.avi']
@@ -32,25 +37,24 @@ def download(uri: str, output: str, callback: callable) -> None:
         raise NotExist('Folder does not exist')
     if os.path.exists(output):
         raise AlreadyExists('File already exists')
-    if os.path.splitext(output)[1] not in SUPPORTED_FORMATS:
-        raise NotSupported('Extension not supported. Must be one of ' + str(SUPPORTED_FORMATS))
+    # if os.path.splitext(output)[1] not in SUPPORTED_FORMATS:
+    #     raise NotSupported('Extension not supported. Must be one of ' + str(SUPPORTED_FORMATS))
 
     if uri.endswith('master.m3u8'):
-        command = ['ffmpeg', '-f', 'hls', '-i', uri, '-c', 'copy', output]
+        if use_ffmpeg:
+            command = ['ffmpeg', '-f', 'hls', '-i', uri, '-c', 'copy', output]
+            ff = FfmpegProgress(command)
+            for progress in ff.run_command_with_progress():
+                callback(progress)
+        else:
+            hls_downloader(uri, output, callback=callback)
 
-        if which(command[0]) is None:
-            raise RuntimeError(f'{command[0]} is not in the System Path')
-
-        ff = FfmpegProgress(command)
-        for progress in ff.run_command_with_progress():
-            callback(progress)
     else:
         def _format(block_num, block_size, total_size):
             callback(int(block_num * block_size / total_size * 100))
 
-        http = urllib3.PoolManager(ca_certs=certifi.where())
-        response = http.request('HEAD', uri)
-        if 'Content-Type' in response.headers and 'video/' in response.headers['Content-Type']:
+        response = requests.head(uri)
+        if 'video/' in response.headers.get('Content-Type', ''):
             urllib.request.urlretrieve(uri, output, _format)
         else:
             raise NotAVideo('Doesn\'t seem to be a video')

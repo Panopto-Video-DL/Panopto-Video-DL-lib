@@ -1,20 +1,40 @@
 # PanoptoDownloader
 
-Simple library to download video from Panopto
+Download video from Panopto!  
 
 ## Prerequisites  
 
+- [Panopto-Video-DL-browser](https://github.com/Panopto-Video-DL/Panopto-Video-DL-browser)
 - Python >= 3.7
 
 ## Install
 
-- Download [lasted release](https://github.com/Panopto-Video-DL/Panopto-Video-DL-lib/releases)
-- In the folder run the command: 
+Run the command:
 ```shell
-pip install .
+pip install git+https://github.com/Panopto-Video-DL/Panopto-Video-DL-lib#egg=PanoptoDownloader
 ```
 
+### FFmpeg extension
+
+Since version 1.4.0 _FFmpeg is no longer needed_, but it is still possible to download video
+using [ffmpeg](https://ffmpeg.org/download.html) by adding `[ffmpeg]` to the pip command used to install it.  
+```shell
+pip install git+https://github.com/Panopto-Video-DL/Panopto-Video-DL-lib#egg=PanoptoDownloader[ffmpeg]
+```
+
+**Note**: FFmpeg **must** be added in the _system PATH_  
+
 ## Usage
+
+- In a new terminal run the command:
+```shell
+panoptodownloader
+```
+- Paste the link automatically copied from [Panopto-Video-DL-browser](https://github.com/Panopto-Video-DL/Panopto-Video-DL-browser)
+- Set the destination folder
+- Wait for the download to finish
+
+## Use as Python Module
 
 ```python
 import PanoptoDownloader
