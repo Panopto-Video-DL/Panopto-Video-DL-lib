@@ -5,9 +5,6 @@ from PanoptoDownloader import __version__
 
 with open('./README.md', 'r') as fp:
     long_description = fp.read()
-with open('requirements.txt', 'r') as fp:
-    install_requires = fp.read().strip().split('\n')
-
 
 setup(
     name='PanoptoDownloader',
@@ -20,10 +17,13 @@ setup(
     license='MIT',
     packages=find_packages(),
     python_requires='>=3.7',
-    install_requires=install_requires,
-    extras_require={
-        'ffmpeg': ['ffmpeg_progress_yield']
-    },
+    install_requires=[
+        'ffmpeg-progress-yield~=0.2.0',
+        'requests~=2.27.1',
+        'pycryptodomex~=3.12.0',
+        'yarl~=1.7.2',
+        'tqdm~=4.62.2'
+    ],
     entry_points="""
         [console_scripts]
         panoptodownloader=PanoptoDownloader.__main__:main

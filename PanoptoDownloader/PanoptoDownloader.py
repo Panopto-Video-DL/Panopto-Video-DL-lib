@@ -3,12 +3,7 @@ import re
 import requests
 import urllib.request
 from shutil import which
-
-try:
-    from ffmpeg_progress_yield import FfmpegProgress
-    use_ffmpeg = which('ffmpeg') is not None
-except ImportError:
-    use_ffmpeg = False
+from ffmpeg_progress_yield import FfmpegProgress
 
 from .exceptions import *
 from .hls_downloader import hls_downloader
@@ -41,6 +36,7 @@ def download(uri: str, output: str, callback: callable) -> None:
     #     raise NotSupported('Extension not supported. Must be one of ' + str(SUPPORTED_FORMATS))
 
     if uri.endswith('master.m3u8'):
+        use_ffmpeg = which('ffmpeg') is not None
         if use_ffmpeg:
             command = ['ffmpeg', '-f', 'hls', '-i', uri, '-c', 'copy', output]
             ff = FfmpegProgress(command)

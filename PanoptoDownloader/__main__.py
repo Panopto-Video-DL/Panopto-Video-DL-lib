@@ -1,6 +1,14 @@
 import os
+import argparse
 import PanoptoDownloader
 from tqdm import tqdm
+
+
+SUPPORTED_FORMATS = PanoptoDownloader.SUPPORTED_FORMATS
+
+parser = argparse.ArgumentParser()
+parser.add_argument('URL', type=str, help='URL copied from Panopto-Video-DL-browser')
+parser.add_argument('-o', '--output', type=str, default='./output' + SUPPORTED_FORMATS[0], help='Output file path')
 
 
 def input_yesno(*args) -> bool:
@@ -15,43 +23,35 @@ def input_yesno(*args) -> bool:
             print('Invalid input. Use Y or N', end='\n\n')
 
 
-def __main__():
+def __main__(args):
     print('PanoptoDownloader', end='\n\n')
 
-    url = None
-    while not url:
-        url = input('URL: ')
+    url = args.URL
+    filepath = args.output
 
-    while True:
-        filepath = None
-        while not filepath:
-            filepath = input('\nOUTPUT file: ')
+    if os.path.isdir(filepath):
+        print('ERROR. Cannot be a folder')
+        exit(1)
+    if not os.path.isdir(os.path.split(filepath)[0] or './'):
+        print('ERROR. Folder does not exist')
+        exit(1)
 
-        if os.path.isdir(filepath):
-            print('ERROR. Cannot be a folder')
-            continue
-        if not os.path.isdir(os.path.split(filepath)[0] or './'):
-            print('ERROR. Folder does not exist')
-            continue
+    extension = os.path.splitext(filepath)[1]
+    if not extension or extension == '.':
+        filepath += SUPPORTED_FORMATS[0] if filepath[-1] != '.' else SUPPORTED_FORMATS[0][1:]
 
-        extension = os.path.splitext(filepath)[1]
-        if not extension or extension == '.':
-            filepath += PanoptoDownloader.SUPPORTED_FORMATS[0] if filepath[-1] != '.' else \
-                PanoptoDownloader.SUPPORTED_FORMATS[0][1:]
-
-        if os.path.exists(filepath):
-            print('File already exist')
-            result = input_yesno('Replace it [Y, n]? ')
-            if result:
-                os.remove(filepath)
-            else:
-                continue
-        if os.path.splitext(filepath)[1] not in PanoptoDownloader.SUPPORTED_FORMATS:
-            print('Extension not officially supported. Choose from: ' + str(PanoptoDownloader.SUPPORTED_FORMATS))
-            result = input_yesno('Continue anyway [Y, n]? ')
-            if not result:
-                continue
-        break
+    if os.path.exists(filepath):
+        print('File already exist')
+        result = input_yesno('Replace it [Y, n]? ')
+        if result:
+            os.remove(filepath)
+        else:
+            exit(1)
+    if os.path.splitext(filepath)[1] not in SUPPORTED_FORMATS:
+        print('Extension not officially supported. Choose from: ' + str(SUPPORTED_FORMATS))
+        result = input_yesno('Continue anyway [Y, n]? ')
+        if not result:
+            exit(1)
 
     print(f'\nDownload started: {filepath}\n')
 
@@ -76,7 +76,8 @@ def __main__():
 
 def main():
     try:
-        __main__()
+        args = parser.parse_args()
+        __main__(args)
     except KeyboardInterrupt:
         print('\nProgram closed')
 
