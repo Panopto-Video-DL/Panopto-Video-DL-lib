@@ -2,13 +2,13 @@ import os
 import argparse
 import PanoptoDownloader
 from tqdm import tqdm
+from PanoptoDownloader import __version__, SUPPORTED_FORMATS
 
-
-SUPPORTED_FORMATS = PanoptoDownloader.SUPPORTED_FORMATS
 
 parser = argparse.ArgumentParser()
 parser.add_argument('URL', type=str, help='URL copied from Panopto-Video-DL-browser')
 parser.add_argument('-o', '--output', type=str, default='./output' + SUPPORTED_FORMATS[0], help='Output file path')
+parser.add_argument('-v', '--version', action='version', version=f'v{__version__}')
 
 
 def input_yesno(*args) -> bool:
