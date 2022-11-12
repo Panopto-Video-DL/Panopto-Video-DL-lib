@@ -29,7 +29,7 @@ Run the command:
 panoptodownloader URL [-o OUTPUT]
 ```
 
-## Use as Python Module
+### Use as Python Module
 
 ```python
 import PanoptoDownloader
