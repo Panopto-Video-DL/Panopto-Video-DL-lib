@@ -15,6 +15,7 @@ REGEX = re.compile(
     r'(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)'
     r'(?::\d+)?'
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+PANOBF_FILE_REGEX = re.compile(r'.*\.panobf(\d+)$', re.IGNORECASE)
 
 
 def download(uri: str, output: str, callback: callable) -> None:
@@ -35,7 +36,7 @@ def download(uri: str, output: str, callback: callable) -> None:
     # if os.path.splitext(output)[1] not in SUPPORTED_FORMATS:
     #     raise NotSupported('Extension not supported. Must be one of ' + str(SUPPORTED_FORMATS))
 
-    if uri.endswith('master.m3u8'):
+    if uri.endswith('master.m3u8') or PANOBF_FILE_REGEX.match(uri):
         use_ffmpeg = which('ffmpeg') is not None
         if use_ffmpeg:
             command = ['ffmpeg', '-f', 'hls', '-i', uri, '-c', 'copy', output]
